@@ -10,11 +10,11 @@
 ; I'm not entirely sure of Arithmetic's definition here
 ; Arithmetic = Expression (+ | -) Expression
 ; Expression = Arithmetic |
-               Logic |
-               Binary |
-               Address |
-               'Expression |
-               '(Expression)
+;               Logic |
+;               Binary |
+;               Address |
+;               'Expression |
+;               '(Expression)
 ; Command = Address "<-" Expression
 
 ; Registers are A-G, however move to register P to print to stdout

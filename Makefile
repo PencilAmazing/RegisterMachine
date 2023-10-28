@@ -4,8 +4,8 @@
 # @file
 # @version 0.1
 
-machine:
-	${CXX} ./machine.cpp -Wall -Wextra -Werror -o machine
+machine: ./machine.cpp ./machine.h
+	${CXX} ./machine.cpp -Wall -Wextra -Werror -fno-exceptions -fno-rtti -o machine
 
 test: machine
 	./machine code.txt

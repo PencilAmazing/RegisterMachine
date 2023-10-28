@@ -39,7 +39,9 @@ public:
     return out;
   }
 
-  char peek() { return current < stored_line.length() ? stored_line[current] : '\0'; }
+  char peek() {
+    return current < stored_line.length() ? stored_line[current] : '\0';
+  }
 
   // Advance index only if next character is expected
   bool match(char expected) {
@@ -116,23 +118,25 @@ public:
 
   BinaryExpression *ParseBinaryExpression() {
     skipWhitespace();
-    int start = current;
+    size_t start = current;
+    // This ensures we only push zeros and ones
     while (peek() == '0' || peek() == '1')
       advance();
 
+    //char *str_end = nullptr;
     BinaryExpression *binary = new BinaryExpression();
-    try {
+    if (start != current) {
       binary->number =
-          std::stoi(stored_line.substr(start, current), nullptr, 2);
-    } catch (std::exception &e) {
+          std::strtol(stored_line.substr(start, current).data(), nullptr, 2);
       // std::cout << "Failed to parse number: "
       //           << stored_line.substr(start, current) << std::endl;
+    } else {
       //  Reset counter
       this->current = start;
       binary->err = true;
-      return binary;
     }
-    //std::cout << "Parsed " << binary->number << std::endl;
+
+    // std::cout << "Parsed " << binary->number << std::endl;
     return binary;
   }
 
@@ -187,7 +191,7 @@ public:
 
     Address *address = ParseAddress();
     skipWhitespace();
-    if(!address->err && isEndOfLine())
+    if (!address->err && isEndOfLine())
       return address;
     // Return error if we got here
     Expression *err = new Expression();
@@ -203,7 +207,7 @@ Command ParseCommand(std::string &line) {
   Scanner scanner(line);
 
   scanner.skipWhitespace();
-  if(scanner.isEndOfLine() || scanner.match(';')) {
+  if (scanner.isEndOfLine() || scanner.match(';')) {
     comm.noop = true;
     return comm;
   }
@@ -234,13 +238,12 @@ Command ParseCommand(std::string &line) {
 
 int main(int argc, char *argv[]) {
   if (argc != 2 && argc != 3) {
-    std::cout << "source [no-output | yes-output]"
-              << std::endl;
+    std::cout << "source [no-output | yes-output]" << std::endl;
     return 1;
   };
 
   bool dumpRegisters = true;
-  if(argc == 3 && std::string("no-output").compare(argv[2]) == 0) {
+  if (argc == 3 && std::string("no-output").compare(argv[2]) == 0) {
     dumpRegisters = false;
   }
 
@@ -266,7 +269,8 @@ int main(int argc, char *argv[]) {
       std::cout << "Error: " << line << std::endl;
   }
 
-  if(dumpRegisters) vm.printState();
+  if (dumpRegisters)
+    vm.printState();
 
   return 0;
 }
