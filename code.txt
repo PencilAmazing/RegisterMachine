@@ -1,0 +1,29 @@
+; fun fact: I'm not sure if i'm using pseudocode or actual intel syntax
+; anyways, be more rigid in your specifications
+; Just for now
+; We assume all numbers are binary?
+; 8 registers
+; Address = A | B | C | D | E | F | G
+; Logic = "ashl" Address |
+;         "ashr" Address |
+;          Address ("&" | "|" | "^" | "@") Address
+; I'm not entirely sure of Arithmetic's definition here
+; Arithmetic = Expression (+ | -) Expression
+; Expression = Arithmetic |
+               Logic |
+               Binary |
+               Address |
+               'Expression |
+               '(Expression)
+; Command = Address "<-" Expression
+
+; Registers are A-G, however move to register P to print to stdout
+A <- 0101
+B <- 0011
+C <- ashl A
+
+P <- C
+D <- A & B
+;C <- A @ B
+;C <- A + B
+;C <- !A
